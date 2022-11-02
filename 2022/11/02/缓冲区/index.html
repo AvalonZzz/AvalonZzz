@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>JavaScript 缓冲区入门 - Avalon</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Avalon"><meta name="msapplication-TileImage" content="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/blog_logo.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Avalon"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="ArrayBuffer 是一种预分配内存，不能直接操作它的内容，是所有 定型数组 和 DataView 的基本单位（即其他 定型数组 和 view 都是通过 ArrayBuffer 实例创建的）。"><meta property="og:type" content="blog"><meta property="og:title" content="JavaScript 缓冲区入门"><meta property="og:url" content="http://github.com/2022/11/02/%E7%BC%93%E5%86%B2%E5%8C%BA/"><meta property="og:site_name" content="Avalon"><meta property="og:description" content="ArrayBuffer 是一种预分配内存，不能直接操作它的内容，是所有 定型数组 和 DataView 的基本单位（即其他 定型数组 和 view 都是通过 ArrayBuffer 实例创建的）。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="http://github.com/img/og_image.png"><meta property="article:published_time" content="2022-11-02T12:18:20.000Z"><meta property="article:modified_time" content="2022-11-02T14:00:09.313Z"><meta property="article:author" content="Avalon"><meta property="article:tag" content="JavaScript"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="http://github.com/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://github.com/2022/11/02/%E7%BC%93%E5%86%B2%E5%8C%BA/"},"headline":"JavaScript 缓冲区入门","image":["http://github.com/img/og_image.png"],"datePublished":"2022-11-02T12:18:20.000Z","dateModified":"2022-11-02T14:00:09.313Z","author":{"@type":"Person","name":"Avalon"},"publisher":{"@type":"Organization","name":"Avalon","logo":{"@type":"ImageObject","url":"https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/blog_name.png"}},"description":"ArrayBuffer 是一种预分配内存，不能直接操作它的内容，是所有 定型数组 和 DataView 的基本单位（即其他 定型数组 和 view 都是通过 ArrayBuffer 实例创建的）。"}</script><link rel="canonical" href="http://github.com/2022/11/02/%E7%BC%93%E5%86%B2%E5%8C%BA/"><link rel="icon" href="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/blog_logo.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/blog_name.png" alt="Avalon" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">首页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://avalonzzz.github.io/"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-11-02T12:18:20.000Z" title="2022/11/2 20:18:20">2022-11-02</time>发表</span><span class="level-item"><time dateTime="2022-11-02T14:00:09.313Z" title="2022/11/2 22:00:09">2022-11-02</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></span><span class="level-item">10 分钟读完 (大约1444个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">JavaScript 缓冲区入门</h1><div class="content"><h1 id="JavaScript-缓冲区入门"><a href="#JavaScript-缓冲区入门" class="headerlink" title="JavaScript 缓冲区入门"></a>JavaScript 缓冲区入门</h1><h2 id="ArrayBuffer"><a href="#ArrayBuffer" class="headerlink" title="ArrayBuffer"></a>ArrayBuffer</h2><p>ArrayBuffer 是一种预分配内存，不能直接操作它的内容，是所有 定型数组 和 DataView 的基本单位（即其他 定型数组 和 view 都是通过 ArrayBuffer 实例创建的）。<br><code>ArrayBuffer(字节数)</code>构造函数用于在内存中分配指定数量的空间<br>byteLength 属性返回 ArrayBuffer 的字节数大小</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> buf = <span class="keyword">new</span> <span class="title class_">ArrayBuffer</span>(<span class="number">16</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(buf.<span class="property">byteLength</span>); <span class="comment">// 16</span></span><br></pre></td></tr></table></figure>
+
+<p>ArrayBuffer 实例一旦创建就不能再调整大小了，只能通过<code>slice()</code>复制部分或全部到新的实例中</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> buf = <span class="keyword">new</span> <span class="title class_">ArrayBuffer</span>(<span class="number">16</span>);</span><br><span class="line"><span class="keyword">const</span> buf1 = buf.<span class="title function_">slice</span>(<span class="number">4</span>, <span class="number">12</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(buf1.<span class="property">byteLength</span>); <span class="comment">// 8</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="DataView"><a href="#DataView" class="headerlink" title="DataView"></a>DataView</h2><p>DataView 必须在已有 ArrayBuffer 的实例上才能创建 DataView 实例。这个实例使用全部或部分 ArrayBuffer，维护该 ArrayBuffer 实例的引用和 DataView 在 ArrayBuffer 中的开始位置。<br>创建 DataView 实例：<code>new DataView(ArrayBuffer, byteOffset, byteLength)</code>byteOffset 值默认是 0，没有 byteLength 则读取到 ArrayBuffer 结尾。</p>
+<p>属性：</p>
+<ul>
+<li>byteOffset 属性返回 DataView 的在 ArrayBuffer 实例中的偏移值</li>
+<li>byteLength 属性和 ArrayBuffer 的一样，返回 DataView 实例的字节数大小</li>
+<li>buffer 属性返回参数 ArrayBuffer 的引用</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> buf = <span class="keyword">new</span> <span class="title class_">ArrayBuffer</span>(<span class="number">16</span>);</span><br><span class="line"><span class="keyword">const</span> dataView = <span class="keyword">new</span> <span class="title class_">DataView</span>(buf, <span class="number">4</span>, <span class="number">8</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(dataView.<span class="property">byteOffset</span>); <span class="comment">// 4</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(dataView.<span class="property">byteLength</span>); <span class="comment">// 8</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(dataView.<span class="property">buffer</span> === buf); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>要通过 DataView 读取缓冲，还需要以下几个条件：</p>
+<ul>
+<li>要读或写的字节偏移量</li>
+<li>DataView 要使用某种 ElementType 来实现 JavaScript 的 Number 类型到缓冲内二进制格式的转换</li>
+<li>内存中的字节序，默认是大端字节序</li>
+</ul>
+<p>DataView 对缓冲中的数据类型没有任何预设，所以必须为缓冲中的数据指定 ElementType。ElementType 见下表：</p>
+<table>
+<thead>
+<tr>
+<th><code>ElementType</code></th>
+<th>字节</th>
+<th>说明</th>
+<th>等价 C 类型</th>
+<th>值的范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Int8</code></td>
+<td>1</td>
+<td>8 位有符号整数</td>
+<td><code>signed char</code></td>
+<td>-128~127</td>
+</tr>
+<tr>
+<td><code>Uint8</code></td>
+<td>1</td>
+<td>8 位无符号整数</td>
+<td><code>unsigned char</code></td>
+<td>0~255</td>
+</tr>
+<tr>
+<td><code>Int16</code></td>
+<td>2</td>
+<td>16 位有符号整数</td>
+<td><code>short</code></td>
+<td>-32768~32767</td>
+</tr>
+<tr>
+<td><code>Uint16</code></td>
+<td>2</td>
+<td>16 位无符号整数</td>
+<td><code>unsigned short</code></td>
+<td>0~65535</td>
+</tr>
+<tr>
+<td><code>Int32</code></td>
+<td>4</td>
+<td>32 位有符号整数</td>
+<td><code>int</code></td>
+<td>-2147483628~2147483647</td>
+</tr>
+<tr>
+<td><code>Uint32</code></td>
+<td>4</td>
+<td>32 位无符号整数</td>
+<td><code>unsigned int</code></td>
+<td>0~4294967295</td>
+</tr>
+<tr>
+<td><code>Float32</code></td>
+<td>4</td>
+<td>32 位 IEEE-754 浮点数</td>
+<td><code>float</code></td>
+<td>-3.4e+38~+3.4e+38</td>
+</tr>
+<tr>
+<td><code>Float64</code></td>
+<td>8</td>
+<td>64 位 IEEE-754 浮点数</td>
+<td><code>double</code></td>
+<td>-1.7e+308~+1.7e+308</td>
+</tr>
+</tbody></table>
+<p>DataView 为所有 ElementType 都暴露了 get 和 set 方法，这些方法使用 byteOffset 定位要读取或写入值的位置。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> buf = <span class="keyword">new</span> <span class="title class_">ArrayBuffer</span>(<span class="number">2</span>);</span><br><span class="line"><span class="keyword">const</span> view = <span class="keyword">new</span> <span class="title class_">DataView</span>(buf);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(view.<span class="title function_">getInt8</span>(<span class="number">0</span>)); <span class="comment">// 0</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(view.<span class="title function_">getInt8</span>(<span class="number">1</span>)); <span class="comment">// 0</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(view.<span class="title function_">setUint8</span>(<span class="number">1</span>, <span class="number">255</span>));</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(view.<span class="title function_">getUint8</span>(<span class="number">1</span>)); <span class="comment">// 255</span></span><br></pre></td></tr></table></figure>
+
+<p>DataView 的所有 API 都以大端字节序为默认值，如果最后一个参数传 true 则启用小端字节序<br>DataView 完成读写操作的前提时有充足的缓冲区，否则会抛出 RangeError。DataView 在写入缓冲里会尽可能把一个值转为适当的类型，后备为 0。如果无法转换则抛出错误。</p>
+<h2 id="定型数组"><a href="#定型数组" class="headerlink" title="定型数组"></a>定型数组</h2><p>定型数组是另一种形式的 ArrayBuffer 视图，特定于一种 ElementType 且遵循系统原生的字节序。</p>
+<p>创建定型数组的方式：</p>
+<ul>
+<li>读取已有缓冲</li>
+<li>使用自有缓冲</li>
+<li>填充可迭代结构</li>
+<li>填充基于任意类型的定型数组</li>
+<li><code>&lt;ElementType&gt;.from()</code></li>
+<li><code>&lt;ElementType&gt;.of()</code></li>
+</ul>
+<p>定型数组实例的属性：</p>
+<ul>
+<li>length：定型数组的长度（不是字节长度）</li>
+<li>buffer：定型数组引用的 ArrayBuffer 实例</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> buf = <span class="keyword">new</span> <span class="title class_">ArrayBuffer</span>(<span class="number">12</span>);</span><br><span class="line"><span class="comment">// 读取已有缓冲的方式创建定型数组</span></span><br><span class="line"><span class="keyword">const</span> ints = <span class="keyword">new</span> <span class="title class_">Int32Array</span>(buf);</span><br><span class="line"><span class="comment">// 这个定型数组知道自己的每个元素需要4字节，所以长度为3</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ints.<span class="property">length</span>); <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用自有缓冲的方式创建定型数组</span></span><br><span class="line"><span class="keyword">const</span> ints2 = <span class="keyword">new</span> <span class="title class_">Int32Array</span>(<span class="number">6</span>);</span><br><span class="line"><span class="comment">// 每个数值使用4字节，因此ArrayBuffer是24字节</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ints2.<span class="property">length</span>); <span class="comment">// 6</span></span><br><span class="line"><span class="comment">// 类似DataView，定性数组也有一个指向关联缓冲的引用</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ints2.<span class="property">buffer</span>.<span class="property">byteLength</span>); <span class="comment">// 24</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用填充可迭代结构的方式创建定型数组</span></span><br><span class="line"><span class="keyword">const</span> ints3 = <span class="keyword">new</span> <span class="title class_">Int32Array</span>([<span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>]);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ints3.<span class="property">length</span>); <span class="comment">// 4</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ints3.<span class="property">buffer</span>.<span class="property">byteLength</span>); <span class="comment">// 16</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ints3[<span class="number">2</span>]); <span class="comment">// 6</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用填充其他任意类型的定型数组的方式创建定型数组</span></span><br><span class="line"><span class="keyword">const</span> ints4 = <span class="keyword">new</span> <span class="title class_">Int16Array</span>(ints3);</span><br><span class="line"><span class="comment">// 新类型数组会分配自己的缓冲，对应索引的每个值会相应地转换为新格式</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ints4.<span class="property">length</span>); <span class="comment">// 4</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ints4.<span class="property">buffer</span>.<span class="property">byteLength</span>); <span class="comment">// 8</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ints4[<span class="number">2</span>]); <span class="comment">// 6</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用&lt;ElementType&gt;.from()的方式创建定型数组</span></span><br><span class="line"><span class="keyword">const</span> ints5 = <span class="title class_">Int16Array</span>.<span class="title function_">from</span>([<span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>]);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ints5.<span class="property">length</span>); <span class="comment">// 4</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ints5.<span class="property">buffer</span>.<span class="property">byteLength</span>); <span class="comment">// 8</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ints5[<span class="number">2</span>]); <span class="comment">// 7</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用&lt;ElementType&gt;.of()地方式创建定型数组</span></span><br><span class="line"><span class="keyword">const</span> floats = <span class="title class_">Float32Array</span>.<span class="title function_">of</span>(<span class="number">3.14</span>, <span class="number">2.718</span>, <span class="number">1.618</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(floats.<span class="property">length</span>); <span class="comment">// 3</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(floats.<span class="property">buffer</span>.<span class="property">byteLength</span>); <span class="comment">// 12</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(floats[<span class="number">2</span>]); <span class="comment">// 1.618</span></span><br></pre></td></tr></table></figure>
+
+<p>定型数组的构造函数和实例都有一个<code>BYTES_PER_ELEMENT</code>属性，返回该类型数组每个元素的字节数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Int16Array</span>.<span class="property">BYTES_PER_ELEMENT</span>); <span class="comment">// 16</span></span><br><span class="line"><span class="keyword">const</span> ints = <span class="keyword">new</span> <span class="title class_">Int32Array</span>(<span class="number">1</span>);</span><br><span class="line"><span class="keyword">const</span> floats = <span class="keyword">new</span> <span class="title class_">FLoat64Array</span>(<span class="number">1</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(ints.<span class="property">BYTES_PER_ELEMENT</span>); <span class="comment">// 4</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(floats.<span class="property">BYTES_PER_ELEMENT</span>); <span class="comment">// 8</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>定型数组支持所有数组方法，包括 for…of 和扩展运算符，除了会改变原数组长度的 concat、pop、push、shift、unshift、splice 这 6 个方法</strong></p>
+<p>定型数组提供了两个新方法，可以快速向外或向内复制数据：set()和 subarray()</p>
+<p>set()从提供的数组或定型数组中把值复制到当前定型数组中指定的索引位置，溢出抛出错误</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> container = <span class="keyword">new</span> <span class="title class_">Int16Array</span>(<span class="number">8</span>);</span><br><span class="line">container.<span class="title function_">set</span>(<span class="title class_">Int32Array</span>.<span class="title function_">of</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>));</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(container); <span class="comment">// [1,2,3,4,0,0,0,0]</span></span><br><span class="line">container.<span class="title function_">set</span>([<span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>], <span class="number">4</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(container); <span class="comment">// [1,2,3,4,5,6,7,8]</span></span><br><span class="line">container.<span class="title function_">set</span>([<span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>], <span class="number">7</span>); <span class="comment">// RangeError: offset is out of bounds</span></span><br></pre></td></tr></table></figure>
+
+<p>subarray()从原始定型数组中复制值，返回一个新的定型数组。复制值的开始索引和结束索引是可选的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> source = <span class="title class_">Int16Array</span>.<span class="title function_">of</span>(<span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>);</span><br><span class="line"><span class="comment">// subarray不传开始索引和结束索引就是复制完整的定型数组</span></span><br><span class="line"><span class="keyword">const</span> fullCopy = source.<span class="title function_">subarray</span>();</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(fullCopy); <span class="comment">// [2,4,6,8]</span></span><br><span class="line"><span class="comment">// 只输入开始索引即从开始索引到结束</span></span><br><span class="line"><span class="keyword">const</span> halfCopy = source.<span class="title function_">subarray</span>(<span class="number">2</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(halfCopy); <span class="comment">// [6,8]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> partialCopy = source.<span class="title function_">subarray</span>(<span class="number">1</span>, <span class="number">3</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(partialCopy); <span class="comment">// [4, 6]</span></span><br></pre></td></tr></table></figure>
+
+<p>定型数组中值的下溢和上溢不会影响到其他索引</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ints = <span class="keyword">new</span> <span class="title class_">Int8Array</span>(<span class="number">2</span>);</span><br><span class="line"><span class="keyword">const</span> unsignedInts = <span class="keyword">new</span> <span class="title class_">Uint8Array</span>(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">unsignedInts[<span class="number">1</span>] = <span class="number">256</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(unsignedInts[<span class="number">1</span>]); <span class="comment">// [0,0]  只会取最低有效位上的8位</span></span><br><span class="line">unsignedInts[<span class="number">1</span>] = <span class="number">511</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(unsignedInts[<span class="number">1</span>]); <span class="comment">// [0,255]</span></span><br></pre></td></tr></table></figure>
+</div><div class="article-licensing box"><div class="licensing-title"><p>JavaScript 缓冲区入门</p><p><a href="http://github.com/2022/11/02/缓冲区/">http://github.com/2022/11/02/缓冲区/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>Avalon</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2022-11-02</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2022-11-02</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/JavaScript/">JavaScript</a></div><div class="a2a_kit a2a_kit_size_32 a2a_default_style"><a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a><a class="a2a_button_facebook"></a><a class="a2a_button_twitter"></a><a class="a2a_button_telegram"></a><a class="a2a_button_whatsapp"></a><a class="a2a_button_reddit"></a></div><script src="https://static.addtoany.com/menu/page.js" defer></script></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/alipay.png" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/wepay.png" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2022/11/01/%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/"><span class="level-item">缓存机制</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'http://github.com/2022/11/02/%E7%BC%93%E5%86%B2%E5%8C%BA/';
+            this.page.identifier = '2022/11/02/缓冲区/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'avalon-disqus-com' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#JavaScript-缓冲区入门"><span class="level-left"><span class="level-item">1</span><span class="level-item">JavaScript 缓冲区入门</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#ArrayBuffer"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">ArrayBuffer</span></span></a></li><li><a class="level is-mobile" href="#DataView"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">DataView</span></span></a></li><li><a class="level is-mobile" href="#定型数组"><span class="level-left"><span class="level-item">1.3</span><span class="level-item">定型数组</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/JavaScript/"><span class="tag">JavaScript</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"><span class="tag">性能优化</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/"><span class="tag">浏览器</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E7%BC%93%E5%AD%98/"><span class="tag">缓存</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E7%BD%91%E7%BB%9C/"><span class="tag">网络</span><span class="tag">1</span></a></div></div></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/blog_name.png" alt="Avalon" height="28"></a><p class="is-size-7"><span>&copy; 2022 Avalon</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://avalonzzz.github.io/"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

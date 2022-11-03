@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>hexo6.0-Icarus5.0打造私人博客指南 - Avalon</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Avalon"><meta name="msapplication-TileImage" content="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/blog_logo.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Avalon"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="网络上有很多关于 Hexo 搭建博客的详细教程，这里就不过多介绍。但是关于 Icarus 主题的配置大多都是老旧的，很多都是讲解 3.0 版本以下的 ejs 构建的 Icarus，3.0 以上用 jsx 构建的 Icarus 配置却很少提及，这里就将之前配置 Icarus5.1 版本趟过的坑分享出来，希望对想配置 Icarus 主题的小伙伴有点帮助。"><meta property="og:type" content="blog"><meta property="og:title" content="hexo6.0-Icarus5.0打造私人博客指南"><meta property="og:url" content="http://github.com/2022/11/03/hexo6.0-Icarus5.1%E6%89%93%E9%80%A0%E7%A7%81%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%8C%87%E5%8D%97/"><meta property="og:site_name" content="Avalon"><meta property="og:description" content="网络上有很多关于 Hexo 搭建博客的详细教程，这里就不过多介绍。但是关于 Icarus 主题的配置大多都是老旧的，很多都是讲解 3.0 版本以下的 ejs 构建的 Icarus，3.0 以上用 jsx 构建的 Icarus 配置却很少提及，这里就将之前配置 Icarus5.1 版本趟过的坑分享出来，希望对想配置 Icarus 主题的小伙伴有点帮助。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/vector_landscape_1.svg"><meta property="article:published_time" content="2022-11-03T12:42:17.000Z"><meta property="article:modified_time" content="2022-11-03T13:56:28.288Z"><meta property="article:author" content="Avalon"><meta property="article:tag" content="Hexo+Icarus"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/vector_landscape_1.svg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://github.com/2022/11/03/hexo6.0-Icarus5.1%E6%89%93%E9%80%A0%E7%A7%81%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%8C%87%E5%8D%97/"},"headline":"hexo6.0-Icarus5.0打造私人博客指南","image":[],"datePublished":"2022-11-03T12:42:17.000Z","dateModified":"2022-11-03T13:56:28.288Z","author":{"@type":"Person","name":"Avalon"},"publisher":{"@type":"Organization","name":"Avalon","logo":{"@type":"ImageObject","url":"https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/blog_name.png"}},"description":"网络上有很多关于 Hexo 搭建博客的详细教程，这里就不过多介绍。但是关于 Icarus 主题的配置大多都是老旧的，很多都是讲解 3.0 版本以下的 ejs 构建的 Icarus，3.0 以上用 jsx 构建的 Icarus 配置却很少提及，这里就将之前配置 Icarus5.1 版本趟过的坑分享出来，希望对想配置 Icarus 主题的小伙伴有点帮助。"}</script><link rel="canonical" href="http://github.com/2022/11/03/hexo6.0-Icarus5.1%E6%89%93%E9%80%A0%E7%A7%81%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%8C%87%E5%8D%97/"><link rel="icon" href="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/blog_logo.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/blog_name.png" alt="Avalon" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">首页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://avalonzzz.github.io/"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><div class="card-image"><span class="image is-7by3"><img class="fill" src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/vector_landscape_1.svg" alt="hexo6.0-Icarus5.0打造私人博客指南"></span></div><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-11-03T12:42:17.000Z" title="2022/11/3 20:42:17">2022-11-03</time>发表</span><span class="level-item"><time dateTime="2022-11-03T13:56:28.288Z" title="2022/11/3 21:56:28">2022-11-03</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E5%B9%B2%E8%B4%A7/">干货</a></span><span class="level-item">8 分钟读完 (大约1272个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">hexo6.0-Icarus5.0打造私人博客指南</h1><div class="content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>网络上有很多关于 Hexo 搭建博客的详细教程，这里就不过多介绍。但是关于 Icarus 主题的配置大多都是老旧的，很多都是讲解 3.0 版本以下的 ejs 构建的 Icarus，3.0 以上用 jsx 构建的 Icarus 配置却很少提及，这里就将之前配置 Icarus5.1 版本趟过的坑分享出来，希望对想配置 Icarus 主题的小伙伴有点帮助。</p>
+<h2 id="修改-navbar-菜单语言"><a href="#修改-navbar-菜单语言" class="headerlink" title="修改 navbar 菜单语言"></a>修改 navbar 菜单语言</h2><p> <code>_config.icarus.yml</code>中的navbar 的 menu 默认是英文的，我们可以将属性改为中文，便于更直观的查看菜单栏</p>
+<p><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/Icarus_navbar_menu.png"></p>
+<h2 id="修改网站-logo-和网页-favicon"><a href="#修改网站-logo-和网页-favicon" class="headerlink" title="修改网站 logo 和网页 favicon"></a>修改网站 logo 和网页 favicon</h2><p>在<code>_config.icarus.yml</code> head 中的 favicon 属性可以配置网页 favicon，logo 属性可以修改网站 logo。</p>
+<p><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/logo_favicon.png"></p>
+<h2 id="配置组件"><a href="#配置组件" class="headerlink" title="配置组件"></a>配置组件</h2><p>Icarus 主题集成了很多组件，我们可在 <code>_config.icarus.yml</code>中的widgets 下自定义自己所需要的配置。</p>
+<p>这里我选择了 profile、toc、categories、archives 和 tags 组件，通过 position 属性的 left 或 right 来控制组件显示在左侧还是右侧。</p>
+<p><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/Icarus_widgets.png"></p>
+<p>最终效果图如下</p>
+<p><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/blog_preview1.png"></p>
+<h2 id="post-页面的个性配置"><a href="#post-页面的个性配置" class="headerlink" title="post 页面的个性配置"></a>post 页面的个性配置</h2><p>在文章的详情页面，我们可以将两侧的组件通过在根目录创建<code>_config.post.yml</code>配置文件来定制博文私有的组件。</p>
+<p>这里我博客首页配置的是三栏布局，在文章详情页显示文章略显拥挤，导致文章显示的内容区域很少，在<code>_config.post.yml</code>文件中我们也可以将所有组件放置一侧，从而实现首页和文章详情页面不同的布局方式。</p>
+<p><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/blog_directory.png"></p>
+<p>在<code>_config.post.yml</code>中按照上一节的配置方法可自由配置自己想要的组件。</p>
+<p><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/blog_config_post.png"></p>
+<h2 id="文章页生成目录"><a href="#文章页生成目录" class="headerlink" title="文章页生成目录"></a>文章页生成目录</h2><p>首先我们要在post页面的私有配置文件中配置目录组件，配置方法见上图中的toc配置项。</p>
+<p>然后需要在文章的头部配置上<code>toc: true</code></p>
+<p><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/blog_toc.png"></p>
+<h2 id="文章模板的配置"><a href="#文章模板的配置" class="headerlink" title="文章模板的配置"></a>文章模板的配置</h2><p>上图已经展示了文档常用的配置项，这里详细说下各个配置项的作用</p>
+<ul>
+<li>title：文章的标题，会在编译在html的head中</li>
+<li>date：文章的创建日期</li>
+<li>cover：文章的封面图</li>
+<li>toc：是否生成文章的目录</li>
+<li>tags：文章的标签，和keywords配置向互斥，如果不配置tags，则配置的keywords会生效并且生成在html中head的meta中，可如果配置了tags，则tags会取代keywords的内容出现在meta标签中，目前两者无法做到合并</li>
+<li>categories：文章分类</li>
+<li>excerpt：文章的descriptions描述，会descriptions的方式编译到html的head中。<strong>配置了这一项，则会将这项配置的值作为文章列表页的摘要</strong></li>
+</ul>
+<p>那么如何配置页面的模板呢？在根目录中有一个叫scaffolds的文件夹，里面有3个配置文章，分别指代hexo的3种页面，这里我配置的是<code>post.md</code>，其他2个配置方法一样。</p>
+<p><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/blog_post_template.png"></p>
+<h2 id="生成列表页阅读更多"><a href="#生成列表页阅读更多" class="headerlink" title="生成列表页阅读更多"></a>生成列表页阅读更多</h2><p>安装hexo-excerpt插件，<code>npm i hexo-excerpt --save</code></p>
+<p>然后在 <code>_config.icarus.yml</code>中配置如下参数</p>
+<p><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/hexo_excerpt.png"></p>
+<p>然后我们就可以看到列表页的每篇文章底部就生成了阅读更多按钮</p>
+<p><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/blog_list_item.png"></p>
+<h2 id="引入disqus评论"><a href="#引入disqus评论" class="headerlink" title="引入disqus评论"></a>引入disqus评论</h2><p>Icarus集成了多种评论，这里我选取了disqus</p>
+<p>首先，我们需要取disqus的官网去注册一个账号，然后通过首页右上角的admin按钮进入配置页面，点击Installing Disqus去创建一个站点，按照disqus的步骤配置完成之后会拿到一个唯一的short_name，通常short_name是你配置的用户名加上<code>-disqus-com</code>，我们只需要将拿到的short_name配置到<code>_config.icarus.yml</code>的comment属性中即可完成评论的接入。</p>
+<p><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/disqus_admin.png"></p>
+<p><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/disqus_short_name.png"></p>
+<h2 id="接入看板娘"><a href="#接入看板娘" class="headerlink" title="接入看板娘"></a>接入看板娘</h2><p>网上很多看板娘教程都是老旧的，按照这些方式引入都不生效。</p>
+<p>我们找到node_modules&#x2F;hexo-theme-icarus&#x2F;layout&#x2F;layout.jsx，只需要将<code>&lt;script src=&quot;https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js&quot;&gt;&lt;/script&gt;</code>这段代码放入到html中即可引入看板娘</p>
+<p>[]: <a href="https://github.com/stevenjoezhang/live2d-widget">https://github.com/stevenjoezhang/live2d-widget</a>	“看板娘git仓库”</p>
+<p><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/icarus_layout_jsx.png"></p>
+<h2 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h2><p>以上就是我配置Icarus5.0以上版本主题是遇到的坑，如有问题，请在下方评论区留言。</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>hexo6.0-Icarus5.0打造私人博客指南</p><p><a href="http://github.com/2022/11/03/hexo6.0-Icarus5.1打造私人博客指南/">http://github.com/2022/11/03/hexo6.0-Icarus5.1打造私人博客指南/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>Avalon</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2022-11-03</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2022-11-03</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Hexo-Icarus/">Hexo+Icarus</a></div><div class="a2a_kit a2a_kit_size_32 a2a_default_style"><a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a><a class="a2a_button_facebook"></a><a class="a2a_button_twitter"></a><a class="a2a_button_telegram"></a><a class="a2a_button_whatsapp"></a><a class="a2a_button_reddit"></a></div><script src="https://static.addtoany.com/menu/page.js" defer></script></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/alipay.png" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/wepay.png" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2022/11/02/%E7%BC%93%E5%86%B2%E5%8C%BA/"><span class="level-item">JavaScript 缓冲区入门</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'http://github.com/2022/11/03/hexo6.0-Icarus5.1%E6%89%93%E9%80%A0%E7%A7%81%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%8C%87%E5%8D%97/';
+            this.page.identifier = '2022/11/03/hexo6.0-Icarus5.1打造私人博客指南/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'avalon-disqus-com' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#前言"><span class="level-left"><span class="level-item">1</span><span class="level-item">前言</span></span></a></li><li><a class="level is-mobile" href="#修改-navbar-菜单语言"><span class="level-left"><span class="level-item">2</span><span class="level-item">修改 navbar 菜单语言</span></span></a></li><li><a class="level is-mobile" href="#修改网站-logo-和网页-favicon"><span class="level-left"><span class="level-item">3</span><span class="level-item">修改网站 logo 和网页 favicon</span></span></a></li><li><a class="level is-mobile" href="#配置组件"><span class="level-left"><span class="level-item">4</span><span class="level-item">配置组件</span></span></a></li><li><a class="level is-mobile" href="#post-页面的个性配置"><span class="level-left"><span class="level-item">5</span><span class="level-item">post 页面的个性配置</span></span></a></li><li><a class="level is-mobile" href="#文章页生成目录"><span class="level-left"><span class="level-item">6</span><span class="level-item">文章页生成目录</span></span></a></li><li><a class="level is-mobile" href="#文章模板的配置"><span class="level-left"><span class="level-item">7</span><span class="level-item">文章模板的配置</span></span></a></li><li><a class="level is-mobile" href="#生成列表页阅读更多"><span class="level-left"><span class="level-item">8</span><span class="level-item">生成列表页阅读更多</span></span></a></li><li><a class="level is-mobile" href="#引入disqus评论"><span class="level-left"><span class="level-item">9</span><span class="level-item">引入disqus评论</span></span></a></li><li><a class="level is-mobile" href="#接入看板娘"><span class="level-left"><span class="level-item">10</span><span class="level-item">接入看板娘</span></span></a></li><li><a class="level is-mobile" href="#结尾"><span class="level-left"><span class="level-item">11</span><span class="level-item">结尾</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/Hexo-Icarus/"><span class="tag">Hexo+Icarus</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JavaScript/"><span class="tag">JavaScript</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"><span class="tag">性能优化</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/"><span class="tag">浏览器</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E7%BC%93%E5%AD%98/"><span class="tag">缓存</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E7%BD%91%E7%BB%9C/"><span class="tag">网络</span><span class="tag">1</span></a></div></div></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/blog_name.png" alt="Avalon" height="28"></a><p class="is-size-7"><span>&copy; 2022 Avalon</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://avalonzzz.github.io/"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body><script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script></html>

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>DOM必知必会 - Avalon</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Avalon"><meta name="msapplication-TileImage" content="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/blog_logo.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Avalon"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="DOM（文档对象模型）是 JS 操作 HTML、XML 的编程接口，是由多层节点构成到的文档。是跨平台操作网页的方式。"><meta property="og:type" content="blog"><meta property="og:title" content="DOM必知必会"><meta property="og:url" content="http://github.com/2022/11/07/DOM%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/"><meta property="og:site_name" content="Avalon"><meta property="og:description" content="DOM（文档对象模型）是 JS 操作 HTML、XML 的编程接口，是由多层节点构成到的文档。是跨平台操作网页的方式。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/DOM_childNodes.png"><meta property="article:published_time" content="2022-11-07T14:53:22.000Z"><meta property="article:modified_time" content="2022-11-07T15:07:46.784Z"><meta property="article:author" content="Avalon"><meta property="article:tag" content="JavaScript"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/DOM_childNodes.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://github.com/2022/11/07/DOM%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/"},"headline":"DOM必知必会","image":["https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/DOM_childNodes.png"],"datePublished":"2022-11-07T14:53:22.000Z","dateModified":"2022-11-07T15:07:46.784Z","author":{"@type":"Person","name":"Avalon"},"publisher":{"@type":"Organization","name":"Avalon","logo":{"@type":"ImageObject","url":"https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/blog_name.png"}},"description":"DOM（文档对象模型）是 JS 操作 HTML、XML 的编程接口，是由多层节点构成到的文档。是跨平台操作网页的方式。"}</script><link rel="canonical" href="http://github.com/2022/11/07/DOM%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/"><link rel="icon" href="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/blog_logo.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/blog_name.png" alt="Avalon" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">首页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://avalonzzz.github.io/"><i class="fab fa-github"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-11-07T14:53:22.000Z" title="2022/11/7 22:53:22">2022-11-07</time>发表</span><span class="level-item"><time dateTime="2022-11-07T15:07:46.784Z" title="2022/11/7 23:07:46">2022-11-07</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></span><span class="level-item">5 分钟读完 (大约700个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">DOM必知必会</h1><div class="content"><h2 id="节点层次"><a href="#节点层次" class="headerlink" title="节点层次"></a>节点层次</h2><p>document 节点是每个文档的根节点，根节点的唯一子元素是 html 元素</p>
+<h3 id="Node-类型"><a href="#Node-类型" class="headerlink" title="Node 类型"></a>Node 类型</h3><p>共有 12 种 Node 类型，可通过节点的<code>nodeType</code>属性访问，值为以下常量：</p>
+<ol>
+<li><code>Node.ELEMENT_NODE</code></li>
+<li><code>Node.ATTRBUTE_NODE</code></li>
+<li><code>Node.TEXT_NODE</code></li>
+<li><code>Node.CDATA_SECTION_NODE</code></li>
+<li><code>Node.ENTITY_REFERENCE_NODE</code></li>
+<li><code>Node.ENTITY_NODE</code></li>
+<li><code>Node.PROCESSING_INSTRUCTION_NODE</code></li>
+<li><code>Node.COMMENT_NODE</code></li>
+<li><code>Node.DOCUMENT_NODE</code></li>
+<li><code>Node.DOCUMENT_TYPE_NODE</code></li>
+<li><code>Node.DOCUMENT_FRAGMENT_NODE</code></li>
+<li><code>Node.NOTATION_NODE</code></li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (someNode.<span class="property">nodeType</span> == <span class="title class_">Node</span>.<span class="property">ELEMENT_NODE</span>) &#123;</span><br><span class="line">  <span class="title function_">alert</span>(<span class="string">&quot;Node is an element.&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="nodeName-和-nodeValue"><a href="#nodeName-和-nodeValue" class="headerlink" title="nodeName 和 nodeValue"></a>nodeName 和 nodeValue</h4><p>nodeName 保存着节点的名字，对元素而言，nodeName 就是标签名，nodeValue 始终为 null</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (someNode.<span class="property">nodeType</span> === <span class="number">1</span>) &#123;</span><br><span class="line">  value = someNode.<span class="property">nodeName</span>; <span class="comment">// 显示元素的标签名</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="节点关系"><a href="#节点关系" class="headerlink" title="节点关系"></a>节点关系</h4><p>每个节点都有 childNodes 属性，包含一个 NodeList 实例，可通过[]或 item()来获取 NodeList 中的项。<br><strong>DOM 结构变化会在 NodeList 中反映出来，NodeList 是实时的活动对象，而不是第一次访问时所获取内容的快照</strong></p>
+<p>每个节点都有 parentNode 属性，指向其 DOM 树中的父元素。<br>childNodes 中每个节点都是同一列表中其他节点的同胞节点，可通过 previousSibling 和 nextSibling 来访问，列表中第一个节点的 previousSibling 和最后一个节点的 nextSibling 为 null<br>firstChild 即<code>childNodes[0]</code>;lastChild 即<code>childNodes[childNodes.length - 1]</code></p>
+<p><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/DOM_childNodes.png"></p>
+<p><code>hasChildNodes()</code>方法用来检查节点是否有子节点，若结果为 true 则表示有一个或多个子节点</p>
+<p><code>ownerDocument</code>属性是一个指向代表整个文档的文档节点的指针</p>
+<h4 id="操纵节点"><a href="#操纵节点" class="headerlink" title="操纵节点"></a>操纵节点</h4><p>以下 4 个方法都是通过 parentNode 操纵子节点</p>
+<ol>
+<li><p>appendChild(node)用于在 childNodes 列表末尾添加节点，返回值为新添加的节点的引用，如果传入的 node 在文档中已存在，则将该 node 移动到最后一个位置</p>
+</li>
+<li><p>insertBefore(要插入的节点，参照节点)，调用后要插入的节点变成参照节点的前一个同胞节点并返回。如果参照节点是 null，则效果和 appendChild 一样</p>
+</li>
+<li><p>replaceChild(要插入的节点，要替换的节点)</p>
+</li>
+<li><p>removeChild(要删除的节点),返回被移除的节点</p>
+</li>
+</ol>
+<h4 id="其他方法"><a href="#其他方法" class="headerlink" title="其他方法"></a>其他方法</h4><p>所有节点类型还共享了以下方法:</p>
+<ol>
+<li><p><code>cloneNode(布尔值)</code>会返回调用此方法的节点一模一样的节点，参数传入 true 表示深复制（即复制节点及其整个子 DOM 树），传入 false 只返回调用方法的节点。此时没有父节点，可用上面的操作方法插入到文档中</p>
+</li>
+<li><p><code>normalize()</code>处理文档子树中的文本节点。如果发现空文本节点则将其删除；如果两个同胞节点是相邻的则将其合并为一个文本节点。</p>
+</li>
+</ol>
+</div><div class="article-licensing box"><div class="licensing-title"><p>DOM必知必会</p><p><a href="http://github.com/2022/11/07/DOM必知必会/">http://github.com/2022/11/07/DOM必知必会/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>Avalon</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2022-11-07</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2022-11-07</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/JavaScript/">JavaScript</a></div><div class="a2a_kit a2a_kit_size_32 a2a_default_style"><a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a><a class="a2a_button_facebook"></a><a class="a2a_button_twitter"></a><a class="a2a_button_telegram"></a><a class="a2a_button_whatsapp"></a><a class="a2a_button_reddit"></a></div><script src="https://static.addtoany.com/menu/page.js" defer></script></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/alipay.png" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/wepay.png" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2022/11/03/hexo6.0-Icarus5.1%E6%89%93%E9%80%A0%E7%A7%81%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%8C%87%E5%8D%97/"><span class="level-item">hexo6.0-Icarus5.0打造私人博客指南</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'http://github.com/2022/11/07/DOM%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/';
+            this.page.identifier = '2022/11/07/DOM必知必会/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'avalon-disqus-com' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><!--!--><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/Hexo-Icarus/"><span class="tag">Hexo+Icarus</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JavaScript/"><span class="tag">JavaScript</span><span class="tag">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"><span class="tag">性能优化</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/"><span class="tag">浏览器</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E7%BC%93%E5%AD%98/"><span class="tag">缓存</span><span class="tag">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%E7%BD%91%E7%BB%9C/"><span class="tag">网络</span><span class="tag">1</span></a></div></div></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="https://raw.githubusercontent.com/AvalonZzz/images/master/imgs/blog_name.png" alt="Avalon" height="28"></a><p class="is-size-7"><span>&copy; 2022 Avalon</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://avalonzzz.github.io/"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body><script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script></html>
